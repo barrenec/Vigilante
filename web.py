@@ -17,5 +17,16 @@ def index():
     return render_template("index.html", data=data)
 
 
+@app.route('/create', methods={'POST', 'GET'})
+def create():
+
+    form_data = {"name":"", "url":"", "check_interval":""}
+
+    if request.method == 'POST':
+        form_data = request.form
+
+    return render_template("form.html", data=form_data)
+
+
 if __name__ == "__main__":
    app.run()
