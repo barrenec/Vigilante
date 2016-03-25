@@ -1,14 +1,29 @@
+{% extends "layout.html" %}
+
+{% block body %}
 
 
+<h2 class="sub-header">Actors</h2>
+<div class="table-responsive">
+<table class="table table-striped">
+  <thead>
+    <tr>
+      <th>#</th>
+      <th>Name</th>
+      <th>Url</th>
+    </tr>
+  </thead>
+  <tbody>
 
-<h1>Welcome to vigilante, just take your time an configure some actors</h1>
-
-
-<h1>Requests</h1>
-<ul>
-{% for row in data %}
-
-<li>{{ row.name }}</li>
+    {% for row in data %}
+    <tr>
+      <td>{{ loop.index }}</td>
+      <td>{{ row.name }}</td>
+      <td>{{ row.url }}</td>
+    </tr>
     {% endfor %}
-</ul>
 
+    </tbody>
+    </table>
+</div>
+{% endblock %}
