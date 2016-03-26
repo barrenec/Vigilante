@@ -31,9 +31,15 @@ def create():
     return render_template("form.html", data=form_data)
 
 
-@app.route('/edit/<id>/')
+@app.route('/edit/<id>/', methods={'POST', 'GET'})
 def edit(id):
     form_data = Schedule.select().where(Schedule.id == id).get()
+    if request.method == 'POST':
+        Schedule.update(name=request.form['name']
+                        , url=request.form['url']
+                        , check_interval=request.form['check_interval']
+                        ).where(Schedule.id == id).execute()
+        return redirect(url_for('index'))
     return render_template("form.html", data=form_data)
 
 

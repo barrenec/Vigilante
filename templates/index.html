@@ -3,27 +3,41 @@
 {% block body %}
 
 
-<h2 class="sub-header">Actors</h2>
-<div class="table-responsive">
-<table class="table table-striped">
-  <thead>
-    <tr>
-      <th>#</th>
-      <th>Name</th>
-      <th>Url</th>
-    </tr>
-  </thead>
-  <tbody>
 
-    {% for row in data %}
-    <tr>
-      <td><a href="edit/{{ row.id }}">{{ row.id }}</a></td>
-      <td>{{ row.name }}</td>
-      <td>{{ row.url }}</td>
-    </tr>
-    {% endfor %}
 
-    </tbody>
-    </table>
+<div class="row">
+    <h2 class="sub-header">Actors</h2>
+
+    <div class="pull-right">
+        <a href="/create" class="btn btn-success">
+            <span class="glyphicon glyphicon-plus" style="vertical-align:middle"></span>
+            Create actor
+        </a>
+    </div>
+</div>
+
+<div class="row">
+    <div class="table-responsive">
+    <table class="table table-striped">
+      <thead>
+        <tr>
+          <th>#</th>
+          <th>Name</th>
+          <th>Url</th>
+        </tr>
+      </thead>
+      <tbody>
+
+        {% for row in data %}
+        <tr>
+          <td><a href="edit/{{ row.id }}">{{ row.id }}</a></td>
+          <td><a href="edit/{{ row.id }}">{{ row.name }}</a></td>
+          <td>{{ row.url }}</td>
+        </tr>
+        {% endfor %}
+
+        </tbody>
+        </table>
+    </div>
 </div>
 {% endblock %}
