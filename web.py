@@ -9,6 +9,7 @@ app.debug = True
 app.root_path = os.path.dirname(os.path.abspath(__file__))
 app.secret_key = 'super secret key'
 
+
 @app.route('/')
 def index():
     #query = (Request.select(Request, Schedule).join(Schedule).limit(10)).sql()
@@ -19,9 +20,7 @@ def index():
 
 @app.route('/create', methods={'POST', 'GET'})
 def create():
-
-    form_data = {"name":"", "url":"", "check_interval":""}
-
+    form_data = {"name": "", "url": "", "check_interval": ""}
     if request.method == 'POST':
         form_data = request.form
         Schedule.create(name=form_data['name']
@@ -30,6 +29,20 @@ def create():
         flash('Your actor has been created')
         return redirect(url_for('index'))
     return render_template("form.html", data=form_data)
+
+
+@app.route('/edit/<id>/')
+def edit(id):
+    form_data = Schedule.select().where(Schedule.id == id).get()
+    return render_template("form.html", data=form_data)
+
+
+@app.route('/delete/<id>/', methods={'POST'})
+def delete(id):
+    Schedule.delete().where(Schedule.id == id).execute()
+    return redirect(url_for('index'))
+
+
 
 
 if __name__ == "__main__":
