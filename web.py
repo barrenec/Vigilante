@@ -26,7 +26,7 @@ def create():
         Schedule.create(name=form_data['name']
                         , url= form_data['url']
                         , check_interval=form_data['check_interval'])
-        flash('Your actor has been created')
+        flash('Your actor has been created', 'success')
         return redirect(url_for('index'))
     return render_template("form.html", data=form_data)
 
@@ -39,6 +39,7 @@ def edit(id):
                         , url=request.form['url']
                         , check_interval=request.form['check_interval']
                         ).where(Schedule.id == id).execute()
+        flash('Your actor has been updated', 'success')
         return redirect(url_for('index'))
     return render_template("form.html", data=form_data)
 
@@ -46,9 +47,8 @@ def edit(id):
 @app.route('/delete/<id>/', methods={'POST'})
 def delete(id):
     Schedule.delete().where(Schedule.id == id).execute()
+    flash('Your actor has been deleted', 'warning')
     return redirect(url_for('index'))
-
-
 
 
 if __name__ == "__main__":
