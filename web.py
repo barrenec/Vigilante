@@ -51,6 +51,11 @@ def delete(id):
     return redirect(url_for('index'))
 
 
+@app.errorhandler(404)
+def not_found(error):
+    return render_template('404.html'), 404
+
+
 def validate_form(form_data):
     pass
 
