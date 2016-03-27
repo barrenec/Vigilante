@@ -1,15 +1,11 @@
 {% extends "layout.html" %}
 
 {% block body %}
-
-
-
-
 <div class="row">
     <h2 class="sub-header">Actors</h2>
 
     <div class="pull-right">
-        <a href="/create" class="btn btn-success">
+        <a href="{{url_for('create')}}" class="btn btn-success">
             <span class="glyphicon glyphicon-plus" style="vertical-align:middle"></span>
             Create actor
         </a>
@@ -30,8 +26,8 @@
 
         {% for row in data %}
         <tr>
-          <td><a href="edit/{{ row.id }}">{{ row.id }}</a></td>
-          <td><a href="edit/{{ row.id }}">{{ row.name }}</a></td>
+          <td><a href="{{ url_for('edit', id=row.id) }}">{{ row.id }}</a></td>
+          <td><a href="{{ url_for('edit', id=row.id) }}">{{ row.name }}</a></td>
           <td>{{ row.url }}</td>
         </tr>
         {% endfor %}

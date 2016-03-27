@@ -31,7 +31,7 @@ def create():
     return render_template("form.html", data=form_data)
 
 
-@app.route('/edit/<id>/', methods={'POST', 'GET'})
+@app.route('/edit/<int:id>/', methods={'POST', 'GET'})
 def edit(id):
     form_data = Schedule.select().where(Schedule.id == id).get()
     if request.method == 'POST':
@@ -44,11 +44,15 @@ def edit(id):
     return render_template("form.html", data=form_data)
 
 
-@app.route('/delete/<id>/', methods={'POST'})
+@app.route('/delete/<int:id>/', methods={'POST'})
 def delete(id):
     Schedule.delete().where(Schedule.id == id).execute()
     flash('Your actor has been deleted', 'warning')
     return redirect(url_for('index'))
+
+
+def validate_form(form_data):
+    pass
 
 
 if __name__ == "__main__":
