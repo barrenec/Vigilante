@@ -1,9 +1,11 @@
 
-from flask import Flask, request, render_template, flash, redirect, session, url_for
+from flask import Flask, request, render_template, flash, redirect, session, url_for, Markup
 import os.path
 from models import Request
 from models import Schedule
+from forms import ScheduleForm
 
+# app config
 app = Flask(__name__)
 app.debug = True
 app.root_path = os.path.dirname(os.path.abspath(__file__))
@@ -20,15 +22,21 @@ def index():
 
 @app.route('/create', methods={'POST', 'GET'})
 def create():
-    form_data = {"name": "", "url": "", "check_interval": ""}
-    if request.method == 'POST':
-        form_data = request.form
-        Schedule.create(name=form_data['name']
-                        , url= form_data['url']
-                        , check_interval=form_data['check_interval'])
+    form = ScheduleForm()
+    if form.validate_on_submit():
+        Schedule.create(name=form['name'].data
+                        , url= form['url'].data
+                        , check_interval=form['check_interval'].data)
         flash('Your actor has been created', 'success')
         return redirect(url_for('index'))
-    return render_template("form.html", data=form_data)
+    elif form.errors:
+        error_string = ""
+        for fieldName, errorMessages in form.errors.iteritems():
+            for err in errorMessages:
+                error_string +=  fieldName + ': ' + err + '<br>'
+        flash(Markup(error_string), 'danger')
+
+    return render_template("form.html", form=form)
 
 
 @app.route('/edit/<int:id>/', methods={'POST', 'GET'})
@@ -54,10 +62,6 @@ def delete(id):
 @app.errorhandler(404)
 def not_found(error):
     return render_template('404.html'), 404
-
-
-def validate_form(form_data):
-    pass
 
 
 if __name__ == "__main__":

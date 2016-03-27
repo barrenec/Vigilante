@@ -4,17 +4,17 @@
 <h2>{% if request.path.find('/create') == 0 %} Create {% else %} Update {% endif %}Agent</h2>
 
 <form action="" method="POST">
+    {{ form.csrf_token }}
     <div class="form-group">
-        <input type="text" name="name" value="{{ data.name }}" class="form-control" placeholder="Name"/>
+        {{ form.name(class="form-control", placeholder="Name")}}
     </div>
 
     <div class="form-group">
-        <input type="text" name="url" value="{{ data.url }}" class="form-control" placeholder="Url"/>
+        {{ form.url(class="form-control", placeholder="Url")}}
     </div>
 
     <div class="form-group">
-        <input type="text" name="check_interval" value="{{ data.check_interval }}" class="form-control"
-               placeholder="Check interval in Seconds"/>
+        {{ form.check_interval(class="form-control", placeholder="Check interval in Seconds")}}
     </div>
 
     <div class="form-group">
