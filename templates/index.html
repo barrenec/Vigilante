@@ -27,7 +27,7 @@
         {% for row in data %}
         <tr>
           <td><a href="{{ url_for('edit', id=row.id) }}">{{ row.id }}</a></td>
-          <td><a href="{{ url_for('edit', id=row.id) }}">{{ row.name }}</a></td>
+          <td><a href="{{ url_for('details', id=row.id) }}">{{ row.name }}</a></td>
           <td>{{ row.url }}</td>
         </tr>
         {% endfor %}

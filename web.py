@@ -2,6 +2,7 @@
 from flask import Flask, request, render_template, flash, redirect, session, url_for, Markup
 import os.path
 from models import Schedule
+from models import Request
 from forms import ScheduleForm
 
 # app config
@@ -13,7 +14,6 @@ app.secret_key = 'super secret key'
 
 @app.route('/')
 def index():
-
     data = Schedule.select()
     return render_template("index.html", data=data)
 
@@ -28,7 +28,7 @@ def create():
         flash('Your actor has been created', 'success')
         return redirect(url_for('index'))
     elif form.errors:
-      handle_form_errors(form.errors)
+        handle_form_errors(form.errors)
 
     return render_template("form.html", form=form)
 
@@ -54,6 +54,13 @@ def delete(id):
     Schedule.delete().where(Schedule.id == id).execute()
     flash('Your actor has been deleted', 'warning')
     return redirect(url_for('index'))
+
+
+@app.route('/details/<int:id>/')
+def details(id):
+    actor = Schedule.select().where(id==id)
+    actor_requests = Request.select().where(Request.url_id == id).order_by(Request.insert_date.desc()).limit(100)
+    return render_template('details.html', actor=actor, actor_requests=actor_requests)
 
 
 @app.errorhandler(404)
