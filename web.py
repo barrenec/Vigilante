@@ -1,7 +1,6 @@
 
 from flask import Flask, request, render_template, flash, redirect, session, url_for, Markup
 import os.path
-from models import Request
 from models import Schedule
 from forms import ScheduleForm
 
@@ -14,8 +13,7 @@ app.secret_key = 'super secret key'
 
 @app.route('/')
 def index():
-    #query = (Request.select(Request, Schedule).join(Schedule).limit(10)).sql()
-    #data = Request.raw(query[0])
+
     data = Schedule.select()
     return render_template("index.html", data=data)
 
@@ -30,11 +28,7 @@ def create():
         flash('Your actor has been created', 'success')
         return redirect(url_for('index'))
     elif form.errors:
-        error_string = ""
-        for fieldName, errorMessages in form.errors.iteritems():
-            for err in errorMessages:
-                error_string +=  fieldName + ': ' + err + '<br>'
-        flash(Markup(error_string), 'danger')
+      handle_form_errors(form.errors)
 
     return render_template("form.html", form=form)
 
@@ -49,6 +43,9 @@ def edit(id):
                         ).where(Schedule.id == id).execute()
         flash('Your actor has been updated', 'success')
         return redirect(url_for('index'))
+    elif form.errors:
+        handle_form_errors(form.errors)
+
     return render_template("form.html", form=form)
 
 
@@ -62,6 +59,15 @@ def delete(id):
 @app.errorhandler(404)
 def not_found(error):
     return render_template('404.html'), 404
+
+
+# only functions no actions
+def handle_form_errors(errors):
+    error_string = ""
+    for fieldName, errorMessages in errors.iteritems():
+        for err in errorMessages:
+            error_string +=  fieldName + ': ' + err + '<br>'
+    flash(Markup(error_string), 'danger')
 
 
 if __name__ == "__main__":

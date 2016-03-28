@@ -17,3 +17,5 @@ data = Request.raw(query[0])
 for row in data:
     print row.name
 
+ #query = (Request.select(Request, Schedule).join(Schedule).limit(10)).sql()
+    #data = Request.raw(query[0])
