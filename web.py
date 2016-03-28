@@ -41,15 +41,15 @@ def create():
 
 @app.route('/edit/<int:id>/', methods={'POST', 'GET'})
 def edit(id):
-    form_data = Schedule.select().where(Schedule.id == id).get()
-    if request.method == 'POST':
+    form = ScheduleForm(obj=Schedule.select().where(Schedule.id == id).get())
+    if form.validate_on_submit():
         Schedule.update(name=request.form['name']
                         , url=request.form['url']
                         , check_interval=request.form['check_interval']
                         ).where(Schedule.id == id).execute()
         flash('Your actor has been updated', 'success')
         return redirect(url_for('index'))
-    return render_template("form.html", data=form_data)
+    return render_template("form.html", form=form)
 
 
 @app.route('/delete/<int:id>/', methods={'POST'})
