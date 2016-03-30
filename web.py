@@ -4,6 +4,8 @@ import os.path
 from models import Schedule
 from models import Request
 from forms import ScheduleForm
+from flask_peewee.utils import PaginatedQuery
+
 
 # app config
 app = Flask(__name__)
@@ -57,10 +59,14 @@ def delete(id):
 
 
 @app.route('/details/<int:id>/')
-def details(id):
+@app.route('/details/<int:id>/page/<int:page>')
+def details(id, page=20):
     actor = Schedule.select().where(id==id)
-    actor_requests = Request.select().where(Request.url_id == id).order_by(Request.insert_date.desc()).limit(100)
-    return render_template('details.html', actor=actor, actor_requests=actor_requests)
+    actor_requests = Request.select().where(Request.url_id == id).order_by(Request.insert_date.desc())
+    pages = PaginatedQuery(actor_requests, page)
+    content = pages.get_list()
+
+    return render_template('details.html', actor=actor, actor_requests=content, pages=pages)
 
 
 @app.errorhandler(404)
@@ -75,6 +81,17 @@ def handle_form_errors(errors):
         for err in errorMessages:
             error_string +=  fieldName + ': ' + err + '<br>'
     flash(Markup(error_string), 'danger')
+
+
+# view helpers/ template filters
+@app.template_filter('format_date')
+def format_date(date):
+    return date.strftime("%d.%m.%y %X")
+
+
+@app.template_filter('format_response_time')
+def format_response_time(time):
+    return time.strftime("%S.%f")[:6]
 
 
 if __name__ == "__main__":

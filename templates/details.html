@@ -2,13 +2,14 @@
 
 {% block body %}
 
+{% include "_pagination.html" %}
 
 <div class="row">
     <div class="table-responsive">
     <table class="table table-striped">
       <thead>
         <tr>
-          <th>Date</th>
+          <th>Date Time</th>
           <th>Status Code</th>
           <th>Response Time</th>
           <th>Content length</th>
@@ -18,9 +19,9 @@
 
         {% for row in actor_requests %}
         <tr>
-          <td>{{row.insert_date}}</td>
+          <td>{{row.insert_date | format_date}}</td>
           <td>{{row.status_code}}</td>
-          <td>{{row.response_time}}</td>
+          <td>{{row.response_time | format_response_time}}</td>
           <td>{{row.content_len}}</td>
         </tr>
         {% endfor %}
@@ -30,5 +31,6 @@
     </div>
 </div>
 
+{% include "_pagination.html" %}
 
 {% endblock %}
