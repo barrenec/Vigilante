@@ -47,6 +47,7 @@ class Schedule(BaseModel):
     check_interval_unit = CharField(default='s')
     check_from = DateTimeField(null=True)
     check_to = DateTimeField(null=True)
+    active = IntegerField(default=0)
 
 
 class Request(BaseModel):

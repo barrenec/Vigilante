@@ -39,9 +39,16 @@ def create():
 def edit(id):
     form = ScheduleForm(obj=Schedule.select().where(Schedule.id == id).get())
     if form.validate_on_submit():
+
+        if 'active' in request.form:
+            active = 1
+        else:
+            active = 0
+
         Schedule.update(name=request.form['name']
                         , url=request.form['url']
                         , check_interval=request.form['check_interval']
+                        , active=active
                         ).where(Schedule.id == id).execute()
         flash('Your actor has been updated', 'success')
         return redirect(url_for('index'))
@@ -61,7 +68,7 @@ def delete(id):
 @app.route('/details/<int:id>/')
 @app.route('/details/<int:id>/page/<int:page>')
 def details(id, page=20):
-    actor = Schedule.select().where(id==id)
+    actor = Schedule.select().where(Schedule.id == id).get()
     actor_requests = Request.select().where(Request.url_id == id).order_by(Request.insert_date.desc())
     pages = PaginatedQuery(actor_requests, page)
     content = pages.get_list()
