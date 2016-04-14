@@ -73,7 +73,13 @@ def details(id, page=20):
     pages = PaginatedQuery(actor_requests, page)
     content = pages.get_list()
 
-    return render_template('details.html', actor=actor, actor_requests=content, pages=pages)
+    stats = {}
+    stats['site_changes'] = actor_requests.select(Request.content_len).distinct().count()
+    stats['total_hits'] = actor_requests.count()
+    stats['ok_hits'] = actor_requests.select(Request.id).where(Request.status_code == '200').count()
+    stats['avg_response_time'] = (sum([row.response_time for row in actor_requests])/stats['total_hits'])
+
+    return render_template('details.html', actor=actor, actor_requests=content, pages=pages, stats=stats)
 
 
 @app.errorhandler(404)

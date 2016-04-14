@@ -54,7 +54,7 @@ class Request(BaseModel):
     id = PrimaryKeyField(unique=True)
     url_id = ForeignKeyField(rel_model=Schedule)
     status_code = CharField()
-    response_time = TimeField()
+    response_time = IntegerField()
     insert_date = DateTimeField(default=datetime.now())
     server = CharField(null=True)
     content_len = IntegerField(null=True)

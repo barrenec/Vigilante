@@ -5,6 +5,11 @@
 
 <h2>{{ actor.name }}</h2>
 <h2>{{ actor.url }}</h2>
+<h3>{{ stats.total_hits }} Total hits</h3>
+<h3>{{ stats.ok_hits }} Successful hits</h3>
+<h3>{{ stats.site_changes }} time changed</h3>
+<h3>{{ stats.avg_response_time }} total avg. time</h3>
+
 
 {% include "_pagination.html" %}
 
@@ -25,7 +30,13 @@
         <tr>
           <td>{{row.insert_date | format_date}}</td>
           <td>{{row.status_code}}</td>
-          <td>{{row.response_time | format_response_time}}</td>
+          {% if row.response_time > 200 %}
+            <td class="text-danger">
+            {% else %}
+            <td class="text-success">
+           {% endif %}
+            {{ row.response_time }} ms
+          </td>
           <td>{{row.content_len}}</td>
         </tr>
         {% endfor %}
